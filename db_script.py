@@ -176,12 +176,34 @@ class Quize_Table:
         c.close()
         return rows
 
+    def get_score(self, question):
+        """:return total number of questions for one category"""
+        points_sql = 'SELECT SUM(possible_points) FROM quiz_questions WHERE questions = ?'
+        c = sqlite3.connect(db)
+        c.row_factory = sqlite3.Row
+        c = c.cursor()
+        # count = []
+        topic = c.execute(points_sql, (question,)).fetchone()[0]
+
+        c.close()
+        return topic
+
     def get_timestamp(self):
         pass
 
+    def add_entry(self, topic, user_answer, score, iscorrect):
+        "Add user result to the table"
+        insert_sql = 'INSERT INTO quiz_result (category,useranswer,total_score,iscorrect) VALUES(?,?,?,?)'
+        c = sqlite3.connect(db)
+        c.row_factory = sqlite3.Row
+        c = c.cursor()
+        res = c.execute(insert_sql, (topic, user_answer, score, iscorrect))
 
-result = Quize_Table()
-# result.insert_questions()
+        c.close()
+        return res
+
+# result = Quize_Table()
+# r = result.get_score('Which planet has the fastest rotation?')
 # print(r)
 
 

@@ -4,59 +4,64 @@ from db_script import Quize_Table
 import ui
 import valid as valid
 import random
+import sys
 quiz = Quize_Table()
 
 
 def main():
     ui.welcome_banner()
-    topic = valid.check_topic_input()
-    print(topic)
-    # if (acct == 'quit'): break
-    num_questions = valid.check_num_input(topic)
-    print(num_questions)
-    display_questions(topic, num_questions)
+    while True:
+        topic = valid.check_topic_input()
+        display_questions(topic)
 
 
-def display_questions(topic, num_questions):
+def display_questions(topic):
+    topic, num_questions = topic
     questions = quiz.get_questions(topic, num_questions)
+    total_incorrect = []
+    total_score = []
 
     for question in questions:
-        points_avbl = display_points_available(question)
-        diff_range = display_range(question)
-        print(question, points_avbl, diff_range)
-
+        print(question, display_range(question),
+              display_points_available(question))
         display_choices(question)
-        user_answer = ui.get_answer('Enter answer here: ').lower()
-        correct = display_answer(question)
-        if user_answer in correct.lower():
-            print('Corret\n')
 
+        user_answer = input('Enter your answer here: ')
+        correct_answer = display_answer(question)
+        check = valid.check_user_answer(user_answer, correct_answer)
+        score = get_Score(question)
+        if check:
+            total_score.append(score)
         else:
-            print(
-                f'sorry that was incorrect, the corect answer is {correct}\n')
+            total_incorrect.append('incorrect')
+
+    print(sum(total_score), total_incorrect, user_answer)
+    return quiz.add_entry(topic[0], user_answer, score, total_incorrect)
 
 
 def display_choices(question):
     answers = quiz.get_possible_answers(question)
-    random.shuffle(answers)
-    for answer in answers:
-        print(f'\t* {answer}')
+    return ui.show_choice(answers)
 
 
 def display_points_available(question):
     points = quiz.get_possible_points(question)
-    return f'worth ({points}) points - '
+    return ui.show_possible_points(points)
 
 
 def display_range(question):
     difficulty_range = quiz.get_range(question)
-    return f'difficulty({difficulty_range})'
+    return ui.get_range(difficulty_range)
 
 
 def display_answer(question):
     correct = quiz.get_answer(question)
-
     return correct
+
+
+def get_Score(question):
+    score = quiz.get_score(question)
+    return score
 
 
 main()
