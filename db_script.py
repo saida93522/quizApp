@@ -6,32 +6,21 @@ import csv
 db = os.path.join('database', 'quiz_records.db')
 
 
-# class Quiz:
-#     def __init__(self, chosen_category, num_of_questions):
-#         self.chosen_category = chosen_category
-#         self.num_of_questions = num_of_questions
-
-#         self.quizz = Quize_Table()
-
-
 class Quize_Table:
-    """Singleton class that renders quize question from db creates,inserts and returns quiz questions.does not store anything from user"""
+    """ Renders quize question from db creates,inserts and returns quiz questions.Stores quiz result in result table"""
     instance = None
 
     def create_questions(self):
         """ create a question table,column matches csv file column heading """
 
-        create_sql = """ CREATE TABLE quiz_questions(
+        create_sql = """ CREATE TABLE quiz_result (
             id INTEGER PRIMARY KEY,
-            questions TEXT,
-            correct TEXT,
-            wrong1 TEXT NOT NULL,
-            wrong2 TEXT NOT NULL,
-            wrong3 TEXT NOT NULL,
-            category TEXT NOT NULL,
-            difficulty INT,
-            possible_points INT,
-            UNIQUE( questions COLLATE NOCASE, correct COLLATE NOCASE))"""
+            user_id INTEGER NOT NULL,
+            useranswer TEXT NOT NULL,
+            iscorrect TEXT NOT NULL,
+            score INT NOT NULL,
+            timestampend DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(user_id) REFERENCES quiz_questions(id))"""
 
         conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES |
                                sqlite3.PARSE_COLNAMES)  # returns cursor object
@@ -40,19 +29,23 @@ class Quize_Table:
         conn.close()
 
     def insert_questions(self):
-        """ open csv file that contains quiz data and insert them into the table """
+        """ open the csv file that contains quiz questions data and insert them into the table """
         conn = sqlite3.connect(db)
 
-        # won't affect application size much
-        key_file = 'database/key.csv'
-        with open(key_file, newline='') as filr:
-            reader = csv.DictReader(filr)
-            add_rows = [(i['questions'], i['correct'], i['wrong1'], i['wrong2'], i['wrong3'],
-                         i['category'], i['difficulty'], i['possible_points']) for i in reader]  # loop through csv col
-        conn.executemany(
-            "INSERT INTO quiz_questions('questions','correct','wrong1','wrong2','wrong3','category','difficulty','possible_points') VALUES (?,?,?,?,?,?,?,?)", add_rows)  # add to table
-        conn.commit()
-        conn.close()
+        # won't affect application size as much
+        try:
+            key_file = 'database/key.csv'
+            with open(key_file, newline='') as qs:
+                reader = csv.DictReader(qs)
+                add_rows = [(i['questions'], i['correct'], i['wrong1'], i['wrong2'], i['wrong3'],
+                            i['category'], i['difficulty'], i['possible_points']) for i in reader]  # loop through csv col
+                conn.executemany(
+                    "INSERT INTO quiz_questions('questions','correct','wrong1','wrong2','wrong3','category','difficulty','possible_points') VALUES (?,?,?,?,?,?,?,?)", add_rows)  # add to table
+        except FileNotFoundError as e:
+            print('csv file not found', e)
+        finally:
+            conn.commit()
+            conn.close()
 
     def display_category(self):
         """ :returns all available topics """
@@ -188,23 +181,24 @@ class Quize_Table:
         c.close()
         return topic
 
-    def get_timestamp(self):
-        pass
+    def get_question_by_id(self, question):
+        question_id = 'SELECT id FROM quiz_questions WHERE questions = ?'
+        con = sqlite3.connect(db)
+        con.row_factory = sqlite3.Row
+        row = con.execute(question_id, (question,))
+        id_data = row.fetchone()[0]
+        con.close()
+        return id_data
 
-    def add_entry(self, topic, user_answer, score, iscorrect):
+    def add_entry(self, question, user_answer, iscorrect, score):
         "Add user result to the table"
-        insert_sql = 'INSERT INTO quiz_result (category,useranswer,total_score,iscorrect) VALUES(?,?,?,?)'
-        c = sqlite3.connect(db)
-        c.row_factory = sqlite3.Row
-        c = c.cursor()
-        res = c.execute(insert_sql, (topic, user_answer, score, iscorrect))
-
+        user_id = self.get_question_by_id(question)
+        insert_sql = 'INSERT INTO quiz_result (user_id,useranswer,iscorrect,score) VALUES(?,?,?,?)'
+        with sqlite3.connect(db) as c:
+            res = c.execute(
+                insert_sql, (user_id, user_answer, iscorrect, score))
         c.close()
         return res
-
-# result = Quize_Table()
-# r = result.get_score('Which planet has the fastest rotation?')
-# print(r)
 
 
 class QuizError(Exception):

@@ -1,5 +1,5 @@
 ''' Question and Answer '''
-import time
+# start sample questions
 questions = {
     'art': {
         'Who painted the Mona Lisa?\t': 'Leonardo da Vinci',
@@ -20,18 +20,11 @@ questions = {
 #  An instance is a specific object created from a particular class.
 # class variables are, variables that are shared among all instances of a class
 
-
-# id, question, category, correct, wrong1, wrong2, wrong3, difficulty, points
-#  self.id = id
-#         self.question = question
-#         self.category = category
-#         self.correct = correct
-#         self.wrong1 = wrong1
-#         self.wrong2 = wrong2
-#         self.wrong3 = wrong3
-#         self.difficulty = difficulty
-#         self.points = points
-
+# 1. displays the available topics to the user and num of question available for that topic.
+# - display category and num of question for that category
+# - that reads quiz question from the database,
+# - return result to the quiz result class
+# --CRUD
 
 """
 Expected output:
@@ -40,7 +33,6 @@ Welcome to the ultimate trivia quiz question
 There 3 topics available: Art, Space, Sport,
 Each topic has 5 questions and you can earn up to 15 points.
 choose a topic and number of question you would like to attempt(1-5)
-Enter The Letter you belive points to the write answer.
 also difficult range(on a 1-5 scale. 1 is easiest, 5 is hardest.) will be displayed next to each question
 -----
 Enter Topic(art,space,sport): space
@@ -52,7 +44,7 @@ Q1) which planet has the fast rotation(difficulty:2)(worth 3 points)
     B.wrong1
     C.correct
     D.wrong3
-Enter Letter: C
+Enter answer: 
 
 Correct! 
 
@@ -61,10 +53,10 @@ Q1) which planet his closest to the sun(difficulty:1)(worth 2 points)
     B.wrong1
     C.wrong3
     D.correct
-Enter Letter: A
+Enter answer: 
 
 Unfortunetly that is incorrect
-The correct answer is D Mercury
+The correct answer is Mercury
 
 --Results--
 Time took to complete the quiz: 3 minutes
@@ -95,6 +87,3 @@ restart game
 
 
 """
-start_time = time.time()
-
-print("--- %s seconds ---" % (time.time() - start_time))

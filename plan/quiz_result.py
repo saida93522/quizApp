@@ -1,9 +1,5 @@
 import sqlite3
 import os
-import db_script
-from db_script import Quize_Table
-import datetime
-result_db = db_script.db
 
 
 # class Quiz_Result:
@@ -24,7 +20,7 @@ result_db = db_script.db
 #         iscorrect TEXT NOT NULL,
 #         useranswer TEXT NOT NULL,
 #         total_score INT NOT NULL,
-#         user_id INT NOT NULL,
+#         user_id INTEGER NOT NULL,
 #         FOREIGN KEY(user_id) REFERENCES quiz_questions(id))"""
 #     conn = sqlite3.connect(result_db, detect_types=sqlite3.PARSE_DECLTYPES |
 #                            sqlite3.PARSE_COLNAMES)  # returns cursor object
