@@ -1,12 +1,14 @@
 import sys
-"Verifies that the user entered the correct input"
+import ui
 from db_script import Quize_Table
 quiz = Quize_Table()
 
 
 def check_topic_input():
+    """ verifies that the user entered the correct input """
+
     while True:
-        topic = input('Enter a topic(art,space,sport): ').lower()
+        topic = ui.ask_question('Enter a topic(art,space,sport): ').lower()
         if topic == 'quit':
             sys.exit()
         user = quiz.display_category()
@@ -32,13 +34,3 @@ def check_num_input(topic):
                 return num_question
         except ValueError:
             print('Enter number only')
-
-
-def check_user_answer(user_answer, correct_answer):
-    if user_answer == correct_answer.lower():
-        print('corret')
-        return True
-    else:
-        print(
-            f'sorry that was incorrect, the corect answer is {correct_answer}\n')
-        return False

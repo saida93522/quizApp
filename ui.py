@@ -33,6 +33,16 @@ def ask_question(question):
     return input(question)
 
 
+def check_user_answer(user_answer, correct_answer):
+    if user_answer == correct_answer.lower():
+        print('corret')
+        return True
+    else:
+        print(
+            f'sorry that was incorrect, the corect answer is {correct_answer}\n')
+        return False
+
+
 def show_result(stime, questions, correct_answers, points_avbl, total_score):
     print('\n---Result---')
     print(
@@ -42,10 +52,3 @@ def show_result(stime, questions, correct_answers, points_avbl, total_score):
     print(f'Total points available: {points_avbl}')
     print(f'Total points earned: {total_score}')
     print(f'You got {(total_score/points_avbl) * 100}% questions right')
-
-
-# 1. displays the available topics to the user and num of question available for that topic.
-# - display category and num of question for that category
-# - that reads quiz question from the database,
-# - return result to the quiz result class
-# --CRUD

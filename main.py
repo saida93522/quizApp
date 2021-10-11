@@ -50,7 +50,7 @@ def get_response(question):
     user_answer = ui.ask_question('Enter your answer here: ')
     correct_answer = display_answer(question)
     # validate user entered correct answer
-    check = valid.check_user_answer(user_answer, correct_answer)
+    check = ui.check_user_answer(user_answer, correct_answer)
     score = 0
     total_correct = 0
     # store user data in db

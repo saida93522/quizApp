@@ -13,6 +13,18 @@ class Quize_Table:
     def create_questions(self):
         """ create a question table,column matches csv file column heading """
 
+        # create_sql = """ CREATE TABLE quiz_questions(
+        #     id INTEGER PRIMARY KEY,
+        #     questions TEXT,
+        #     correct TEXT,
+        #     wrong1 TEXT NOT NULL,
+        #     wrong2 TEXT NOT NULL,
+        #     wrong3 TEXT NOT NULL,
+        #     category TEXT NOT NULL,
+        #     difficulty INT,
+        #     possible_points INT,
+        #     UNIQUE( questions COLLATE NOCASE, correct COLLATE NOCASE))"""
+
         create_sql = """ CREATE TABLE quiz_result (
             id INTEGER PRIMARY KEY,
             user_id INTEGER NOT NULL,
@@ -87,19 +99,13 @@ class Quize_Table:
 
     def get_question_count(self, topic):
         """:return total number of questions for one category"""
-        # topic = self.display_category()
         points_sql = 'SELECT COUNT(questions) FROM quiz_questions WHERE category = ?'
 
         c = sqlite3.connect(db)
         c.row_factory = sqlite3.Row
         c = c.cursor()
-        # count = []
         topic = c.execute(points_sql, (topic,)).fetchone()[0]
-        # for row in topic:
-        #     points = c.execute(points_sql, (row,)).fetchone()[0]
-        #     count.append(points)
 
-        # points = c.fetchone()
         c.close()
         return topic
 
@@ -108,8 +114,6 @@ class Quize_Table:
         :param topic to choose the category to fnd the answers, num_of_questions to Limit number of possible answers returned
         :returns list of possible answers based given topic question
         """
-        # try = [e for t in chosen_category for e in t]
-        # list_format = ','.join(try)
 
         options_sql = 'SELECT correct, wrong1, wrong2, wrong3 FROM quiz_questions WHERE questions = ?'
 
@@ -139,18 +143,11 @@ class Quize_Table:
         :param list of question based on chosen catergory, num_of_questions user wants to attempt"""
         points_sql = 'SELECT possible_points FROM quiz_questions WHERE questions = ? '
 
-        # topic = self.display_category()
-        # print(topic)
-
         c = sqlite3.connect(db)
         c.row_factory = sqlite3.Row
         c = c.cursor()
         rows = c.execute(points_sql, (question,)).fetchone()[0]
 
-        # count = []
-        # for row in rows:
-        #     points = row['possible_points']
-        #     count.append(points)
         c.close()
         return rows
 
@@ -187,13 +184,20 @@ class Quize_Table:
         con.row_factory = sqlite3.Row
         row = con.execute(question_id, (question,))
         id_data = row.fetchone()[0]
+        rows_modified = row.rowcount
+        if not question:
+            raise QuizError('That question is not db')
         con.close()
+        if rows_modified == 0:
+            raise QuizError('Question with that id not found in the db')
+
         return id_data
 
     def add_entry(self, question, user_answer, iscorrect, score):
         "Add user result to the table"
         user_id = self.get_question_by_id(question)
         insert_sql = 'INSERT INTO quiz_result (user_id,useranswer,iscorrect,score) VALUES(?,?,?,?)'
+
         with sqlite3.connect(db) as c:
             res = c.execute(
                 insert_sql, (user_id, user_answer, iscorrect, score))
@@ -201,5 +205,12 @@ class Quize_Table:
         return res
 
 
+table = Quize_Table()
+t = table.get_question_by_id(
+    'Which planet spins in the opposite direction to all the others in the solar system?')
+print(t)
+
+
 class QuizError(Exception):
+    """ Class for Quiz errors"""
     pass

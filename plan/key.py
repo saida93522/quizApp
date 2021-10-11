@@ -26,6 +26,7 @@ questions = {
 # - return result to the quiz result class
 # --CRUD
 
+
 """
 Expected output:
 Welcome to the ultimate trivia quiz question
@@ -69,18 +70,6 @@ Percentage score [Percentage score = points earned / points available * 100 ]
 
 
 
-create_sql = CREATE TABLE quiz_questions(
-            id INTEGER PRIMARY KEY,
-            questions TEXT,
-            correct TEXT,
-            wrong1 TEXT NOT NULL,
-            wrong2 TEXT NOT NULL,
-            wrong3 TEXT NOT NULL,
-            category TEXT NOT NULL,
-            difficulty INT,
-            possible_points INT,
-            timestampstart DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE( questions COLLATE NOCASE, correct COLLATE NOCASE))
 //
 restart game
 
