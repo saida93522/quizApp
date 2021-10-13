@@ -1,5 +1,6 @@
 """ Program displays the available topics from the database as well as the number of questions for that topic. """
-# use class variable for storing sessions
+#!/usr/bin/env python
+
 from db_script import Quize_Table
 import ui
 import valid as valid
@@ -8,14 +9,17 @@ import sys
 import time
 quiz = Quize_Table()
 
-#!/usr/bin/env python
 
 
 def main():
     ui.welcome_banner()
     while True:
         topic = valid.check_topic_input()
-        display_questions(topic)
+        if topic == 'quit':
+            break
+        else:
+            display_questions(topic)
+        
 
 
 def display_questions(topic):

@@ -203,12 +203,7 @@ class Quize_Table:
                 insert_sql, (user_id, user_answer, iscorrect, score))
         c.close()
         return res
-
-
-table = Quize_Table()
-t = table.get_question_by_id(
-    'Which planet spins in the opposite direction to all the others in the solar system?')
-print(t)
+# use class variable for storing sessions
 
 
 class QuizError(Exception):

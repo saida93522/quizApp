@@ -10,7 +10,7 @@ def check_topic_input():
     while True:
         topic = ui.ask_question('Enter a topic(art,space,sport): ').lower()
         if topic == 'quit':
-            sys.exit()
+            return topic
         user = quiz.display_category()
         if topic in user:
             num_questions = check_num_input(topic)

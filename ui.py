@@ -10,7 +10,7 @@ def welcome_banner():
     print('----The Rules are simple------')
     print('There are 3 topics available: Art, Space, Sport')
     print('Choose a topic and number of question you would like to attempt between(1-5)')
-    print('Enter "q" to quit the game')
+    print('Enter "quit" to quit the game')
 
 
 def show_question(question, difficulty, points):
