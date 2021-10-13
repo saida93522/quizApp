@@ -1,4 +1,6 @@
-__pycache__
+__pycache__/
 *.pyc
 .idea
-.vscode
+.vscode/
+*.py[cod]
+*.log
