@@ -46,7 +46,8 @@ def check_user_answer(user_answer, correct_answer):
             f'sorry that was incorrect, the corect answer is {correct_answer}\n')
         return False
 
-
+# this function also calculates time elapsed. That logic belongs in another function
+# instead of stime, can this function have the total time as a parameter? 
 def show_result(stime, questions, correct_answers, points_avbl, total_score):
     print('\n---Result---')
     print(
