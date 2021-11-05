@@ -8,6 +8,7 @@ def welcome_banner():
     """ Print a message to the user"""
     print('\tPut your knowledge to the test with this Ultimate Quiz Questions!')
     print('----The Rules are simple------')
+    # The choice of topics should come from the data availale in the database, not coded into the program 
     print('There are 3 topics available: Art, Space, Sport')
     print('Choose a topic and number of question you would like to attempt between(1-5)')
     print('Enter "quit" to quit the game')
@@ -30,11 +31,14 @@ def ask_question(question):
     """ Ask user question
     :param: the question to ask
     :returns: user's response """
+    
     return input(question)
 
 
 def check_user_answer(user_answer, correct_answer):
-    if user_answer == correct_answer.lower():
+    # If I answer "Simone Biles" and the correct answer, in lowercase, is "simone biles" 
+    # this will decide the answer is incorrect and return false.  So lowercase both user answer and correct answer. 
+    if user_answer.lower() == correct_answer.lower():
         print('corret')
         return True
     else:
@@ -42,7 +46,8 @@ def check_user_answer(user_answer, correct_answer):
             f'sorry that was incorrect, the corect answer is {correct_answer}\n')
         return False
 
-
+# this function also calculates time elapsed. That logic belongs in another function
+# instead of stime, can this function have the total time as a parameter? 
 def show_result(stime, questions, correct_answers, points_avbl, total_score):
     print('\n---Result---')
     print(

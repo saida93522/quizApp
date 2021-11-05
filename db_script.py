@@ -15,7 +15,7 @@ class Quize_Table:
 
         # create_sql = """ CREATE TABLE quiz_questions(
         #     id INTEGER PRIMARY KEY,
-        #     questions TEXT,
+        #     questions TEXT,    # call this column "question" since each row represents one question, not many 
         #     correct TEXT,
         #     wrong1 TEXT NOT NULL,
         #     wrong2 TEXT NOT NULL,
@@ -183,12 +183,12 @@ class Quize_Table:
         con = sqlite3.connect(db)
         con.row_factory = sqlite3.Row
         row = con.execute(question_id, (question,))
-        id_data = row.fetchone()[0]
-        rows_modified = row.rowcount
+        id_data = row.fetchone()[0]  # what would a better name for this variable be? question or question_text ? 
+        rows_modified = row.rowcount  # since this is a select statement, no rows were modified. This value is the number of rows selected?
         if not question:
             raise QuizError('That question is not db')
         con.close()
-        if rows_modified == 0:
+        if rows_modified == 0:   # rows modified 
             raise QuizError('Question with that id not found in the db')
 
         return id_data
@@ -202,7 +202,7 @@ class Quize_Table:
             res = c.execute(
                 insert_sql, (user_id, user_answer, iscorrect, score))
         c.close()
-        return res
+        return res  # what will you do with this return value?
 # use class variable for storing sessions
 
 

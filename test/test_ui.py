@@ -20,7 +20,9 @@ class TestUI(TestCase):
     @patch('builtins.print')
     def test_show_question(self, mock_print):
         self.assertTrue(ui.show_question('is python a snake?', 2, 4))
-        mock_print.assert_called()
+        # this checks if print was called at all. To be more specific,
+        mock_print.assert_called()  # check that the print statement is called with the 'is python a snake' string 
+
 
     def test_show_question_wrong_data_type(self):
         self.assertFalse(ui.show_question(2, 4, 5))
@@ -30,6 +32,13 @@ class TestUI(TestCase):
 
     def test_show_choices(self):
         answers = ['yes', 'no', 'maybe', 'idk']
+        # show_choice doesn't return anything.  See notes on assertTrue in test_quiz.
+        # the second argument is a message to print when the test fails.
+        # but what these are checking is, the first argument, the list, is that True?
+        # and lists with at least one element are Truthy, 
+        # so ['no', 'yes', 'idk', 'maybe'] is truthy and the assert statement is happy
+        # but these checks are not checking anything about your code.
+        # Here you may want to mock print and verify it prints each answer one time. 
         self.assertTrue(['no', 'yes', 'idk', 'maybe'],
                         ui.show_choice(answers))
         self.assertTrue(['idk', 'maybe', 'no', 'yes'],
@@ -38,7 +47,25 @@ class TestUI(TestCase):
                         ui.show_choice(answers))
 
     def test_check_user_answer(self):
+        # check correct answer is identified
         user = 'jupiter'
         correct = 'jupiter'
         self.assertTrue(ui.check_user_answer(user, correct))
-        self.assertFalse(ui.check_user_answer('mars', correct))
+    
+
+    def test_check_user_answer_different_case(self):
+        # check correct answer is identified, even with different case.  
+        # You could add some more different combinations of upper and lowercase here too
+        user = 'JuPitEr'
+        correct = 'jupiter'
+        self.assertTrue(ui.check_user_answer(user, correct))
+
+
+    def test_check_user_answer_incorrect(self):
+        # check wrong answer is identified 
+        user = 'mars'
+        correct = 'jupiter'
+        self.assertTrue(ui.check_user_answer(user, correct))
+
+
+
