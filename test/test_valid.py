@@ -18,6 +18,7 @@ class TestValid(TestCase):
         self.assertNotIn('aliens', self.quiz.display_category())
 
     def test_check_num_input(self):
+        # see comments in test_quiz on assertTrue. Should these be assertEqual statements? 
         self.assertTrue(5, self.quiz.get_question_count('art'))
         self.assertTrue(1, self.quiz.get_question_count('art'))
         self.assertFalse(0, self.quiz.get_question_count('art'))
